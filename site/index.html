@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beam — Play movies from your Mac on any Cast TV</title>
+  <meta name="description" content="Beam is a native macOS app that plays the movies on your Mac on any Chromecast or Google Cast TV, with subtitles, audio tracks, playlists and resume.">
+  <meta property="og:title" content="Beam for Mac">
+  <meta property="og:description" content="Play the movies on your Mac on any Cast TV. Subtitles, audio tracks, playlists and resume built in.">
+  <meta property="og:image" content="screenshot-now-playing.png">
+  <link rel="icon" href="favicon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <style>
+    :root {
+      --bg: #111114;
+      --surface: #1a1a1f;
+      --line: rgba(255, 255, 255, 0.08);
+      --text: #f2f2f5;
+      --muted: rgba(242, 242, 245, 0.6);
+      --accent: #736bff;
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+    header { display: flex; align-items: center; gap: 10px; padding: 22px 0; }
+    header img { width: 32px; height: 32px; }
+    header strong { font-size: 18px; letter-spacing: -0.01em; }
+    header nav { margin-left: auto; display: flex; gap: 22px; font-size: 14px; }
+    header nav a { color: var(--muted); text-decoration: none; }
+    header nav a:hover { color: var(--text); }
+
+    .hero { text-align: center; padding: 64px 0 40px; }
+    .hero img.icon { width: 112px; height: 112px; }
+    .hero h1 {
+      margin: 20px 0 12px;
+      font-size: clamp(36px, 6vw, 60px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+    .hero p { margin: 0 auto; max-width: 560px; font-size: 19px; color: var(--muted); }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 32px; }
+    .button {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 22px; border-radius: 999px;
+      font-weight: 600; font-size: 15px; text-decoration: none;
+      border: 1px solid var(--line);
+    }
+    .button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .button.primary:hover { filter: brightness(1.08); }
+    .button.secondary { background: var(--surface); }
+    .button.secondary:hover { border-color: rgba(255, 255, 255, 0.2); }
+    .fine { margin-top: 14px; font-size: 13px; color: var(--muted); }
+
+    .shot { margin: 32px auto 0; }
+    .shot img {
+      display: block; width: 100%; height: auto;
+      border-radius: 14px; border: 1px solid var(--line);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    section { padding: 72px 0 0; }
+    h2 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 24px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+    .card h3 { margin: 0 0 6px; font-size: 16px; }
+    .card p { margin: 0; color: var(--muted); font-size: 14px; }
+    .card .glyph { color: var(--accent); font-size: 20px; margin-bottom: 10px; }
+
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .pair img { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); }
+
+    ol.steps { margin: 0; padding-left: 20px; color: var(--muted); }
+    ol.steps li { margin: 6px 0; }
+    ol.steps strong { color: var(--text); }
+
+    footer {
+      margin-top: 88px; padding: 28px 0 40px; border-top: 1px solid var(--line);
+      display: flex; flex-wrap: wrap; gap: 12px 24px; font-size: 13px; color: var(--muted);
+    }
+    footer a { color: var(--muted); }
+    footer span:last-child { margin-left: auto; }
+
+    @media (max-width: 760px) {
+      .grid, .pair { grid-template-columns: 1fr; }
+      header nav { display: none; }
+      .hero { padding-top: 32px; }
+      footer span:last-child { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <img src="icon.png" alt="">
+      <strong>Beam</strong>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com/prasad-kumkar/beam-cast">GitHub</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <img class="icon" src="icon.png" alt="Beam app icon">
+      <h1>Your movies,<br>on the big screen.</h1>
+      <p>Beam plays the movies on your Mac on any Chromecast or Google&nbsp;Cast TV. Drop a file, press play.</p>
+      <div class="actions">
+        <a class="button primary" href="https://github.com/prasad-kumkar/beam-cast/releases/latest">Download for Mac</a>
+        <a class="button secondary" href="https://github.com/prasad-kumkar/beam-cast">View on GitHub</a>
+      </div>
+      <div class="fine">Free for personal use · macOS 13 or later · Apple silicon &amp; Intel</div>
+    </div>
+
+    <div class="shot">
+      <img src="screenshot-now-playing.png" alt="Beam's Now Playing screen controlling a movie on a TV" width="1600" height="1033">
+    </div>
+
+    <section id="features">
+      <h2>Everything a movie night needs</h2>
+      <div class="grid">
+        <div class="card"><div class="glyph">▶︎</div><h3>Plays what you have</h3><p>MP4, MKV and MOV up to 4K HEVC, streamed straight from your Mac with no upload or conversion.</p></div>
+        <div class="card"><div class="glyph">Aa</div><h3>Subtitles that just work</h3><p>Finds subtitles next to the movie or inside it. SRT, VTT, ASS. Fix timing and style while you watch.</p></div>
+        <div class="card"><div class="glyph">♫</div><h3>Audio tracks</h3><p>Switch language or commentary tracks, and Beam remembers your preference.</p></div>
+        <div class="card"><div class="glyph">≡</div><h3>Up Next</h3><p>Drop a whole season. Episodes play back to back, with shuffle and repeat.</p></div>
+        <div class="card"><div class="glyph">↺</div><h3>Resume anywhere</h3><p>Every movie picks up where you stopped, even days later.</p></div>
+        <div class="card"><div class="glyph">⌨︎</div><h3>Media keys</h3><p>Play, pause and skip from your keyboard or Control Center while Beam stays in the background.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="pair">
+        <img src="screenshot-library.png" alt="Beam's library screen with a movie and its Up Next queue" loading="lazy">
+        <img src="screenshot-empty.png" alt="Beam's start screen: drop a movie to beam it" loading="lazy">
+      </div>
+    </section>
+
+    <section id="install">
+      <h2>Install</h2>
+      <ol class="steps">
+        <li>Download <strong>Beam.dmg</strong> (drag to Applications) or <strong>Beam.pkg</strong> (installer) from the <a href="https://github.com/prasad-kumkar/beam-cast/releases/latest">latest release</a>.</li>
+        <li>Open Beam and allow <strong>Local Network</strong> access so it can find your TV.</li>
+        <li>Optional: <code>brew install ffmpeg</code> for poster frames, embedded subtitles and audio track switching.</li>
+      </ol>
+    </section>
+
+    <footer>
+      <span>© 2026 Prasad Kumkar</span>
+      <span><a href="https://github.com/prasad-kumkar/beam-cast/blob/main/LICENSE">Business Source License 1.1</a> · free for personal use</span>
+      <span>Chromecast and Google Cast are trademarks of Google LLC. Beam is not affiliated with Google.</span>
+    </footer>
+  </div>
+</body>
+</html>
