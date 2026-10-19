@@ -2,10 +2,10 @@
   <img src="site/icon.png" width="128" alt="Beam app icon">
 </p>
 
-<h1 align="center">Beam — Cast video from Mac to Chromecast</h1>
+<h1 align="center">Beam</h1>
 
 <p align="center">
-  A free, native macOS app to stream local MP4, MKV and 4K movies to Chromecast, Google TV and Android TV, with subtitles.<br>
+  Play the movies on your Mac on any Chromecast or Google Cast TV.<br>
   <a href="https://github.com/prasad-kumkar/beam-cast/releases/latest"><b>Download</b></a> ·
   <a href="https://prasad-kumkar.github.io/beam-cast/">Website</a> ·
   <a href="#license">License</a>
