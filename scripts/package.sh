@@ -22,7 +22,7 @@ STAGING="$(mktemp -d)"
 trap 'rm -rf "$STAGING"' EXIT
 cp -R "$APP_PATH" "$STAGING/"
 ln -s /Applications "$STAGING/Applications"
-rm -f "$DMG_PATH"
+rm -f "$DMG_PATH" "$OUTPUT_DIR/Beam.dmg" "$OUTPUT_DIR/Beam.pkg"
 hdiutil create -volname "Beam $VERSION" -srcfolder "$STAGING" -fs HFS+ -format UDZO -ov "$DMG_PATH" >/dev/null
 
 # Installer package that puts Beam.app in /Applications.
@@ -52,6 +52,10 @@ if [[ -n "${NOTARY_PROFILE:-}" ]]; then
     done
 fi
 
-shasum -a 256 "$DMG_PATH" "$PKG_PATH" | sed "s|$OUTPUT_DIR/||" > "$OUTPUT_DIR/SHA256SUMS.txt"
+# Unversioned copies give stable links: …/releases/latest/download/Beam.dmg
+cp "$DMG_PATH" "$OUTPUT_DIR/Beam.dmg"
+cp "$PKG_PATH" "$OUTPUT_DIR/Beam.pkg"
+
+(cd "$OUTPUT_DIR" && shasum -a 256 "$(basename "$DMG_PATH")" "$(basename "$PKG_PATH")" Beam.dmg Beam.pkg) > "$OUTPUT_DIR/SHA256SUMS.txt"
 echo "$DMG_PATH"
 echo "$PKG_PATH"

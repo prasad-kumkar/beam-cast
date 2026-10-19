@@ -32,10 +32,17 @@ Beam is a Chromecast player for Mac. Drop a video file on it, pick your TV, and 
 
 ## Install
 
-1. Download **Beam-x.y.z.dmg** (drag Beam to Applications) or **Beam-x.y.z.pkg** (installer) from the [latest release](https://github.com/prasad-kumkar/beam-cast/releases/latest).
-2. Open Beam. Current builds aren't notarized by Apple yet, so the first launch shows *"Beam" Not Opened*. Click **Done**, then go to **System Settings › Privacy & Security**, scroll down and click **Open Anyway** next to Beam. You only do this once. (Terminal alternative: `xattr -dr com.apple.quarantine /Applications/Beam.app`)
-3. Allow **Local Network** access when asked, so Beam can find your TV.
-4. Optional but recommended: `brew install ffmpeg` enables poster frames, embedded subtitles, ASS/SSA files and audio track switching.
+**Easiest: one line in Terminal** (no security prompt, re-run any time to update):
+
+```sh
+curl -fsSL https://prasad-kumkar.github.io/beam-cast/install.sh | bash
+```
+
+**Or download** [Beam.dmg](https://github.com/prasad-kumkar/beam-cast/releases/latest/download/Beam.dmg) and drag Beam to Applications ([Beam.pkg](https://github.com/prasad-kumkar/beam-cast/releases/latest/download/Beam.pkg) installer also available). Beam isn't notarized by Apple yet, so the first launch says *"Apple could not verify Beam…"*: click **Done**, open **System Settings › Privacy & Security**, and click **Open Anyway**. You only do this once.
+
+Then allow **Local Network** access when asked, so Beam can find your TV. Optional but recommended: `brew install ffmpeg` enables poster frames, embedded subtitles, ASS/SSA files and audio track switching.
+
+To uninstall: `curl -fsSL https://prasad-kumkar.github.io/beam-cast/install.sh | bash -s -- --uninstall` (add `--purge` to also delete settings).
 
 Requirements: macOS 13 Ventura or later (Apple silicon M1–M4 or Intel), and your Mac and TV on the same network.
 

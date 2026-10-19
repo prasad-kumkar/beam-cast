@@ -201,6 +201,35 @@
     ol.steps li { margin: 6px 0; }
     ol.steps strong { color: var(--text); }
 
+    .command {
+      display: flex; align-items: center; gap: 10px;
+      max-width: 620px; margin: 22px auto 0; padding: 8px 8px 8px 16px;
+      background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+      font: 13px/1.4 ui-monospace, "SF Mono", Menlo, monospace; text-align: left;
+    }
+    .command .prompt { color: var(--muted); user-select: none; }
+    .command code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; color: var(--text); }
+    .command.small { margin: 14px 0 0; max-width: none; }
+    .copy {
+      flex: none; padding: 7px 14px; border-radius: 8px; cursor: pointer;
+      border: 1px solid var(--line); background: rgba(255, 255, 255, 0.06);
+      color: var(--text); font: 600 12px/1 -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .copy:hover { background: rgba(255, 255, 255, 0.12); }
+    .copy.done { background: var(--accent); border-color: var(--accent); }
+    .fine.meta { margin-top: 18px; }
+    .install { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+    .install .card { position: relative; }
+    .install .card p { font-size: 15px; }
+    .install .steps { padding-left: 18px; font-size: 15px; }
+    .tag {
+      position: absolute; top: 18px; right: 18px; padding: 3px 9px; border-radius: 999px;
+      background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+    }
+    ol.steps.after { margin-top: 20px; }
+    ol.steps code { overflow-wrap: anywhere; }
+    code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.9em; }
+    @media (max-width: 760px) { .install { grid-template-columns: minmax(0, 1fr); } }
     .works { text-align: center; color: var(--muted); font-size: 14px; max-width: 720px; margin: 28px auto 0; }
     .works strong { color: var(--text); font-weight: 600; }
     .faq { display: grid; gap: 10px; }
@@ -243,10 +272,16 @@
       <h1>Your movies,<br>on the big screen.</h1>
       <p>Beam plays the movies on your Mac on any Chromecast or Google&nbsp;Cast TV. Drop a file, press play.</p>
       <div class="actions">
-        <a class="button primary" href="https://github.com/prasad-kumkar/beam-cast/releases/latest">Download for Mac</a>
+        <a class="button primary" href="https://github.com/prasad-kumkar/beam-cast/releases/latest/download/Beam.dmg">Download for Mac</a>
         <a class="button secondary" href="https://github.com/prasad-kumkar/beam-cast">View on GitHub</a>
       </div>
-      <div class="fine">Free for personal use · macOS 13 or later · Apple silicon &amp; Intel</div>
+      <div class="command" role="group" aria-label="Install from Terminal">
+        <span class="prompt">$</span>
+        <code id="install-cmd">curl -fsSL https://prasad-kumkar.github.io/beam-cast/install.sh | bash</code>
+        <button type="button" class="copy" data-copy="install-cmd">Copy</button>
+      </div>
+      <div class="fine">Or paste this into Terminal to install with no security prompt.</div>
+      <div class="fine meta">Free for personal use · macOS 13 or later · Apple silicon &amp; Intel</div>
     </div>
 
     <div class="shot">
@@ -310,11 +345,29 @@
 
     <section id="install">
       <h2>Install</h2>
-      <ol class="steps">
-        <li>Download <strong>Beam.dmg</strong> (drag to Applications) or <strong>Beam.pkg</strong> (installer) from the <a href="https://github.com/prasad-kumkar/beam-cast/releases/latest">latest release</a>.</li>
-        <li>First launch only: macOS says Beam can't be verified because it isn't notarized yet. Click <strong>Done</strong>, then open <strong>System Settings › Privacy &amp; Security</strong> and click <strong>Open Anyway</strong>.</li>
-        <li>Allow <strong>Local Network</strong> access so Beam can find your TV.</li>
-        <li>Optional: <code>brew install ffmpeg</code> for poster frames, embedded subtitles and audio track switching.</li>
+      <div class="install">
+        <div class="card">
+          <span class="tag">Easiest</span>
+          <h3>Terminal, one line</h3>
+          <p>Open <strong>Terminal</strong>, paste this and press Return. Beam installs to Applications and opens, with no security prompt. Run it again any time to update.</p>
+          <div class="command small">
+            <code id="install-cmd-2">curl -fsSL https://prasad-kumkar.github.io/beam-cast/install.sh | bash</code>
+            <button type="button" class="copy" data-copy="install-cmd-2">Copy</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Disk image</h3>
+          <ol class="steps">
+            <li>Download <a href="https://github.com/prasad-kumkar/beam-cast/releases/latest/download/Beam.dmg"><strong>Beam.dmg</strong></a> and drag Beam to Applications.</li>
+            <li>Open Beam. macOS shows <em>"Apple could not verify Beam…"</em> because Beam isn't notarized yet. Click <strong>Done</strong>.</li>
+            <li>Open <strong>System Settings › Privacy &amp; Security</strong>, scroll down and click <strong>Open Anyway</strong>. You only do this once.</li>
+          </ol>
+        </div>
+      </div>
+      <ol class="steps after">
+        <li>When Beam asks, allow <strong>Local Network</strong> access so it can find your TV.</li>
+        <li>Optional: <code>brew install ffmpeg</code> adds poster frames, embedded subtitles and audio track switching.</li>
+        <li>Prefer an installer? <a href="https://github.com/prasad-kumkar/beam-cast/releases/latest/download/Beam.pkg">Beam.pkg</a> is available too. To uninstall: <code>curl -fsSL https://prasad-kumkar.github.io/beam-cast/install.sh | bash -s -- --uninstall</code></li>
       </ol>
     </section>
 
@@ -324,5 +377,17 @@
       <span>Chromecast and Google Cast are trademarks of Google LLC. Beam is not affiliated with Google.</span>
     </footer>
   </div>
+  <script>
+    document.querySelectorAll(".copy").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var text = document.getElementById(button.dataset.copy).textContent;
+        navigator.clipboard.writeText(text).then(function () {
+          button.textContent = "Copied";
+          button.classList.add("done");
+          setTimeout(function () { button.textContent = "Copy"; button.classList.remove("done"); }, 1800);
+        });
+      });
+    });
+  </script>
 </body>
 </html>
