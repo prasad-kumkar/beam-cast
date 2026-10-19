@@ -26,12 +26,24 @@ rm -f "$DMG_PATH"
 hdiutil create -volname "Beam $VERSION" -srcfolder "$STAGING" -fs HFS+ -format UDZO -ov "$DMG_PATH" >/dev/null
 
 # Installer package that puts Beam.app in /Applications.
+# Bundle relocation is turned off: otherwise Installer "upgrades" any other copy
+# of Beam it finds on disk (Downloads, a build folder…) instead of /Applications.
+PKG_ROOT="$STAGING/pkgroot"
+mkdir -p "$PKG_ROOT"
+ditto "$APP_PATH" "$PKG_ROOT/Beam.app"
+pkgbuild --analyze --root "$PKG_ROOT" "$STAGING/components.plist" >/dev/null
+plutil -replace 0.BundleIsRelocatable -bool NO "$STAGING/components.plist"
+pkgbuild --root "$PKG_ROOT" --component-plist "$STAGING/components.plist" \
+    --install-location /Applications --identifier com.prasad.beam --version "$VERSION" \
+    "$STAGING/Beam-component.pkg" >/dev/null
+
+# Wrap it in a product archive so Installer shows a normal install flow.
 rm -f "$PKG_PATH"
-PKG_ARGS=(--component "$APP_PATH" --install-location /Applications --identifier com.prasad.beam --version "$VERSION")
+PRODUCT_ARGS=(--package "$STAGING/Beam-component.pkg" --identifier com.prasad.beam.installer --version "$VERSION")
 if [[ -n "${INSTALLER_SIGN_IDENTITY:-}" ]]; then
-    PKG_ARGS+=(--sign "$INSTALLER_SIGN_IDENTITY")
+    PRODUCT_ARGS+=(--sign "$INSTALLER_SIGN_IDENTITY")
 fi
-pkgbuild "${PKG_ARGS[@]}" "$PKG_PATH" >/dev/null
+productbuild "${PRODUCT_ARGS[@]}" "$PKG_PATH" >/dev/null
 
 if [[ -n "${NOTARY_PROFILE:-}" ]]; then
     for artifact in "$DMG_PATH" "$PKG_PATH"; do

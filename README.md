@@ -33,7 +33,7 @@ Beam is a Chromecast player for Mac. Drop a video file on it, pick your TV, and 
 ## Install
 
 1. Download **Beam-x.y.z.dmg** (drag Beam to Applications) or **Beam-x.y.z.pkg** (installer) from the [latest release](https://github.com/prasad-kumkar/beam-cast/releases/latest).
-2. Open Beam. If macOS says it can't verify the developer, right-click Beam › **Open** once (only needed for unsigned builds).
+2. Open Beam. Current builds aren't notarized by Apple yet, so the first launch shows *"Beam" Not Opened*. Click **Done**, then go to **System Settings › Privacy & Security**, scroll down and click **Open Anyway** next to Beam. You only do this once. (Terminal alternative: `xattr -dr com.apple.quarantine /Applications/Beam.app`)
 3. Allow **Local Network** access when asked, so Beam can find your TV.
 4. Optional but recommended: `brew install ffmpeg` enables poster frames, embedded subtitles, ASS/SSA files and audio track switching.
 
