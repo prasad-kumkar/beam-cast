@@ -3,11 +3,130 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Beam — Play movies from your Mac on any Cast TV</title>
-  <meta name="description" content="Beam is a native macOS app that plays the movies on your Mac on any Chromecast or Google Cast TV, with subtitles, audio tracks, playlists and resume.">
-  <meta property="og:title" content="Beam for Mac">
-  <meta property="og:description" content="Play the movies on your Mac on any Cast TV. Subtitles, audio tracks, playlists and resume built in.">
-  <meta property="og:image" content="screenshot-now-playing.png">
+  <title>Beam: Cast Video from Mac to Chromecast &amp; Google TV</title>
+  <meta name="description" content="Free Mac app to cast MP4, MKV and 4K videos from your Mac to Chromecast, Google TV and Android TV, with subtitles, audio tracks and playlists. No Chrome needed.">
+  <meta name="keywords" content="cast video from mac to chromecast, chromecast mac app, mac to chromecast, stream mkv to chromecast, cast local files to chromecast, chromecast subtitles mac, google tv mac app, android tv cast from mac, macbook to tv, chromecast player mac, 4k hevc chromecast, srt subtitles chromecast">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="author" content="Prasad Kumkar">
+  <meta name="theme-color" content="#111114">
+  <link rel="canonical" href="https://prasad-kumkar.github.io/beam-cast/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Beam">
+  <meta property="og:url" content="https://prasad-kumkar.github.io/beam-cast/">
+  <meta property="og:title" content="Beam — Cast videos from your Mac to Chromecast &amp; Google TV">
+  <meta property="og:description" content="Free Mac app: play MP4, MKV and 4K movies from your Mac on any Chromecast or Google TV, with subtitles, audio tracks, playlists and resume.">
+  <meta property="og:image" content="https://prasad-kumkar.github.io/beam-cast/screenshot-now-playing.png">
+  <meta property="og:image:width" content="1600">
+  <meta property="og:image:height" content="1033">
+  <meta property="og:image:alt" content="Beam controlling a movie playing on a Chromecast TV">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Beam — Cast videos from your Mac to Chromecast &amp; Google TV">
+  <meta name="twitter:description" content="Free Mac app to play MP4, MKV and 4K movies on any Chromecast or Google TV, with subtitles and playlists.">
+  <meta name="twitter:image" content="https://prasad-kumkar.github.io/beam-cast/screenshot-now-playing.png">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Beam",
+  "alternateName": "Beam Cast",
+  "description": "Free Mac app to cast local video files (MP4, MKV, MOV, 4K HEVC) from macOS to Chromecast, Google TV and Android TV, with subtitles, audio tracks, playlists and resume.",
+  "applicationCategory": "MultimediaApplication",
+  "applicationSubCategory": "Video streaming",
+  "operatingSystem": "macOS 13 or later",
+  "softwareVersion": "1.2.0",
+  "url": "https://prasad-kumkar.github.io/beam-cast/",
+  "downloadUrl": "https://github.com/prasad-kumkar/beam-cast/releases/latest",
+  "image": "https://prasad-kumkar.github.io/beam-cast/icon.png",
+  "screenshot": "https://prasad-kumkar.github.io/beam-cast/screenshot-now-playing.png",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Prasad Kumkar",
+    "url": "https://github.com/prasad-kumkar"
+  },
+  "license": "https://github.com/prasad-kumkar/beam-cast/blob/main/LICENSE",
+  "featureList": [
+    "Cast MP4, MKV and MOV to Chromecast",
+    "4K HEVC streaming",
+    "SRT, VTT and ASS subtitles",
+    "Embedded subtitle and audio track selection",
+    "Subtitle timing and style",
+    "Playlists with auto-play next",
+    "Resume playback",
+    "Media keys and Control Center"
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I cast a video from my Mac to Chromecast?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Install Beam, make sure your Mac and Chromecast are on the same Wi-Fi network, drop the video file onto Beam, pick your TV in the top-right corner and press Play on TV. Beam streams the file directly from your Mac; you don't need Google Chrome."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I cast MKV files from a Mac to Chromecast?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Beam streams MKV, MP4, M4V, MOV and WebM files to Chromecast and Google TV, including 4K HEVC (H.265) and H.264 video. Playback depends on the codecs your TV supports; MP4 is the most widely supported."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Beam show subtitles on Chromecast?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Beam loads SRT, VTT, ASS and SSA subtitle files automatically when they sit next to the movie, and it can use subtitles embedded in MKV files. You can change subtitle size, color and background, and fix out-of-sync subtitles while the movie plays."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I change the audio language when casting to my TV?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. For movies with several audio tracks, such as different languages or a director's commentary, choose the track from Beam's audio menu and Beam switches it on the TV."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which TVs and devices does Beam work with?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Any Google Cast receiver: Chromecast, Chromecast Ultra, Chromecast with Google TV, Google TV Streamer, and smart TVs running Google TV or Android TV from brands such as Sony, TCL, Hisense and Philips."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Beam free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Beam is free for personal, non-commercial use. Its source code is available on GitHub under the Business Source License 1.1; business and commercial use needs a commercial license."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Beam work on Apple silicon and Intel Macs?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Beam is a native universal macOS app for Apple silicon (M1, M2, M3, M4) and Intel Macs running macOS 13 Ventura or later."
+      }
+    }
+  ]
+}
+  </script>
   <link rel="icon" href="favicon.png">
   <link rel="apple-touch-icon" href="icon.png">
   <style>
@@ -82,6 +201,16 @@
     ol.steps li { margin: 6px 0; }
     ol.steps strong { color: var(--text); }
 
+    .works { text-align: center; color: var(--muted); font-size: 14px; max-width: 720px; margin: 28px auto 0; }
+    .works strong { color: var(--text); font-weight: 600; }
+    .faq { display: grid; gap: 10px; }
+    .faq details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; }
+    .faq summary { cursor: pointer; font-weight: 600; list-style: none; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; float: right; color: var(--muted); }
+    .faq details[open] summary::after { content: "−"; }
+    .faq p { margin: 10px 0 0; color: var(--muted); font-size: 15px; }
+
     footer {
       margin-top: 88px; padding: 28px 0 40px; border-top: 1px solid var(--line);
       display: flex; flex-wrap: wrap; gap: 12px 24px; font-size: 13px; color: var(--muted);
@@ -111,42 +240,78 @@
 
     <div class="hero">
       <img class="icon" src="icon.png" alt="Beam app icon">
-      <h1>Your movies,<br>on the big screen.</h1>
-      <p>Beam plays the movies on your Mac on any Chromecast or Google&nbsp;Cast TV. Drop a file, press play.</p>
+      <h1>Cast movies from your Mac<br>to Chromecast &amp; Google&nbsp;TV.</h1>
+      <p>Beam is a free Mac app that streams the video files on your Mac (MP4, MKV, MOV, 4K HEVC) to any Chromecast, Google&nbsp;TV or Android&nbsp;TV, with subtitles. Drop a file, press play.</p>
       <div class="actions">
         <a class="button primary" href="https://github.com/prasad-kumkar/beam-cast/releases/latest">Download for Mac</a>
         <a class="button secondary" href="https://github.com/prasad-kumkar/beam-cast">View on GitHub</a>
       </div>
-      <div class="fine">Free for personal use · macOS 13 or later · Apple silicon &amp; Intel</div>
+      <div class="fine">Free for personal use · macOS 13 or later · Apple silicon (M1–M4) &amp; Intel</div>
     </div>
 
     <div class="shot">
-      <img src="screenshot-now-playing.png" alt="Beam's Now Playing screen controlling a movie on a TV" width="1600" height="1033">
+      <img src="screenshot-now-playing.png" alt="Beam Mac app casting a movie to a Chromecast TV, with play, pause, seek, subtitle and volume controls" width="1600" height="1033">
     </div>
 
+    <p class="works">Works with <strong>Chromecast</strong>, <strong>Chromecast with Google TV</strong>, <strong>Chromecast Ultra</strong>, <strong>Google TV</strong> and <strong>Android TV</strong> sets (Sony, TCL, Hisense, Philips and more) and other Google Cast receivers.</p>
+
     <section id="features">
-      <h2>Everything a movie night needs</h2>
+      <h2>The Chromecast player your Mac was missing</h2>
       <div class="grid">
-        <div class="card"><div class="glyph">▶︎</div><h3>Plays what you have</h3><p>MP4, MKV and MOV up to 4K HEVC, streamed straight from your Mac with no upload or conversion.</p></div>
-        <div class="card"><div class="glyph">Aa</div><h3>Subtitles that just work</h3><p>Finds subtitles next to the movie or inside it. SRT, VTT, ASS. Fix timing and style while you watch.</p></div>
-        <div class="card"><div class="glyph">♫</div><h3>Audio tracks</h3><p>Switch language or commentary tracks, and Beam remembers your preference.</p></div>
-        <div class="card"><div class="glyph">≡</div><h3>Up Next</h3><p>Drop a whole season. Episodes play back to back, with shuffle and repeat.</p></div>
-        <div class="card"><div class="glyph">↺</div><h3>Resume anywhere</h3><p>Every movie picks up where you stopped, even days later.</p></div>
-        <div class="card"><div class="glyph">⌨︎</div><h3>Media keys</h3><p>Play, pause and skip from your keyboard or Control Center while Beam stays in the background.</p></div>
+        <div class="card"><div class="glyph">▶︎</div><h3>Stream MKV, MP4 &amp; 4K to Chromecast</h3><p>Cast local MP4, MKV and MOV files up to 4K HEVC straight from your Mac. No upload, no Chrome tab, no conversion.</p></div>
+        <div class="card"><div class="glyph">Aa</div><h3>Chromecast subtitles that just work</h3><p>Finds SRT, VTT and ASS subtitles next to the movie or embedded in the MKV. Fix subtitle sync and size while you watch.</p></div>
+        <div class="card"><div class="glyph">♫</div><h3>Choose the audio track</h3><p>Switch language, dub or commentary tracks in multi-audio files. Beam remembers your preferred language.</p></div>
+        <div class="card"><div class="glyph">≡</div><h3>Playlists &amp; binge mode</h3><p>Drop a whole TV season. Episodes play back to back on your TV, with shuffle and repeat.</p></div>
+        <div class="card"><div class="glyph">↺</div><h3>Resume where you left off</h3><p>Every movie and episode picks up where you stopped, even days later.</p></div>
+        <div class="card"><div class="glyph">⌨︎</div><h3>A real remote on your Mac</h3><p>Play, pause, seek and TV volume, plus keyboard media keys and Control Center while Beam is in the background.</p></div>
       </div>
     </section>
 
     <section>
       <div class="pair">
-        <img src="screenshot-library.png" alt="Beam's library screen with a movie and its Up Next queue" loading="lazy">
-        <img src="screenshot-empty.png" alt="Beam's start screen: drop a movie to beam it" loading="lazy">
+        <img src="screenshot-library.png" alt="Beam showing a 4K MKV movie with audio and subtitle track menus and an Up Next playlist" loading="lazy" width="1600" height="1033">
+        <img src="screenshot-empty.png" alt="Beam start screen: drag and drop a video file to cast it to your TV" loading="lazy" width="1600" height="1033">
+      </div>
+    </section>
+
+    <section id="faq">
+      <h2>Questions</h2>
+      <div class="faq">
+        <details>
+          <summary>How do I cast a video from my Mac to Chromecast?</summary>
+          <p>Install Beam, make sure your Mac and Chromecast are on the same Wi-Fi network, drop the video file onto Beam, pick your TV in the top-right corner and press Play on TV. Beam streams the file directly from your Mac; you don't need Google Chrome.</p>
+        </details>
+        <details>
+          <summary>Can I cast MKV files from a Mac to Chromecast?</summary>
+          <p>Yes. Beam streams MKV, MP4, M4V, MOV and WebM files to Chromecast and Google TV, including 4K HEVC (H.265) and H.264 video. Playback depends on the codecs your TV supports; MP4 is the most widely supported.</p>
+        </details>
+        <details>
+          <summary>Does Beam show subtitles on Chromecast?</summary>
+          <p>Yes. Beam loads SRT, VTT, ASS and SSA subtitle files automatically when they sit next to the movie, and it can use subtitles embedded in MKV files. You can change subtitle size, color and background, and fix out-of-sync subtitles while the movie plays.</p>
+        </details>
+        <details>
+          <summary>Can I change the audio language when casting to my TV?</summary>
+          <p>Yes. For movies with several audio tracks, such as different languages or a director's commentary, choose the track from Beam's audio menu and Beam switches it on the TV.</p>
+        </details>
+        <details>
+          <summary>Which TVs and devices does Beam work with?</summary>
+          <p>Any Google Cast receiver: Chromecast, Chromecast Ultra, Chromecast with Google TV, Google TV Streamer, and smart TVs running Google TV or Android TV from brands such as Sony, TCL, Hisense and Philips.</p>
+        </details>
+        <details>
+          <summary>Is Beam free?</summary>
+          <p>Beam is free for personal, non-commercial use. Its source code is available on GitHub under the Business Source License 1.1; business and commercial use needs a commercial license.</p>
+        </details>
+        <details>
+          <summary>Does Beam work on Apple silicon and Intel Macs?</summary>
+          <p>Yes. Beam is a native universal macOS app for Apple silicon (M1, M2, M3, M4) and Intel Macs running macOS 13 Ventura or later.</p>
+        </details>
       </div>
     </section>
 
     <section id="install">
-      <h2>Install</h2>
+      <h2>Install Beam on your Mac</h2>
       <ol class="steps">
-        <li>Download <strong>Beam.dmg</strong> (drag to Applications) or <strong>Beam.pkg</strong> (installer) from the <a href="https://github.com/prasad-kumkar/beam-cast/releases/latest">latest release</a>.</li>
+        <li>Download the free <strong>Beam.dmg</strong> (drag to Applications) or <strong>Beam.pkg</strong> (installer) from the <a href="https://github.com/prasad-kumkar/beam-cast/releases/latest">latest release</a>.</li>
         <li>Open Beam and allow <strong>Local Network</strong> access so it can find your TV.</li>
         <li>Optional: <code>brew install ffmpeg</code> for poster frames, embedded subtitles and audio track switching.</li>
       </ol>

@@ -2,10 +2,10 @@
   <img src="site/icon.png" width="128" alt="Beam app icon">
 </p>
 
-<h1 align="center">Beam</h1>
+<h1 align="center">Beam — Cast video from Mac to Chromecast</h1>
 
 <p align="center">
-  Play the movies on your Mac on any Chromecast or Google Cast TV.<br>
+  A free, native macOS app to stream local MP4, MKV and 4K movies to Chromecast, Google TV and Android TV, with subtitles.<br>
   <a href="https://github.com/prasad-kumkar/beam-cast/releases/latest"><b>Download</b></a> ·
   <a href="https://prasad-kumkar.github.io/beam-cast/">Website</a> ·
   <a href="#license">License</a>
@@ -15,10 +15,12 @@
   <img src="site/screenshot-now-playing.png" width="820" alt="Beam's Now Playing screen">
 </p>
 
+Beam is a Chromecast player for Mac. Drop a video file on it, pick your TV, and it plays on the big screen: no Chrome tab, no uploading, no converting. It handles the things that usually go wrong when casting from a MacBook: MKV files, 4K HEVC, external and embedded subtitles, multiple audio languages, and binge-watching a whole season.
+
 ## Features
 
-- **Plays what you have**: MP4, MKV and MOV up to 4K HEVC, streamed straight from your Mac over your local network
-- **Subtitles**: SRT, VTT and ASS/SSA files next to the movie, or tracks embedded in it, picked up automatically; adjust timing and style (size, color, background) while playing
+- **Cast local files to Chromecast**: MP4, MKV, M4V, MOV and WebM up to 4K HEVC (H.265) and H.264, streamed straight from your Mac over Wi-Fi
+- **Chromecast subtitles**: SRT, VTT and ASS/SSA files next to the movie, or tracks embedded in it, picked up automatically; adjust timing and style (size, color, background) while playing
 - **Audio tracks**: switch language or commentary tracks; Beam remembers your preferred language
 - **Up Next**: drop several files or a whole season to queue them, with auto-play, shuffle and repeat
 - **Resume**: every movie continues where you stopped
@@ -35,7 +37,9 @@
 3. Allow **Local Network** access when asked, so Beam can find your TV.
 4. Optional but recommended: `brew install ffmpeg` enables poster frames, embedded subtitles, ASS/SSA files and audio track switching.
 
-Requirements: macOS 13 or later (Apple silicon or Intel), and your Mac and TV on the same network.
+Requirements: macOS 13 Ventura or later (Apple silicon M1–M4 or Intel), and your Mac and TV on the same network.
+
+**Works with** Chromecast, Chromecast Ultra, Chromecast with Google TV, Google TV Streamer, and Google TV / Android TV smart TVs (Sony, TCL, Hisense, Philips and others).
 
 ## Usage
 
@@ -56,6 +60,16 @@ Tips:
 - **Subtitles out of sync?** Subtitles › Adjust Timing. Use + if they show too early, − if too late.
 - **Stuttering?** MP4 (H.264 or HEVC) plays most smoothly; some TVs handle MKV less well.
 - Scripting: `open -a Beam --args -movie /path/movie.mkv -subtitles /path/movie.srt -autocast YES`
+
+## FAQ
+
+**How do I cast a video from my Mac to Chromecast without Chrome?** Open the file in Beam, choose your TV, press Play on TV. Beam talks to the Chromecast directly.
+
+**Can I play MKV files on Chromecast from a Mac?** Yes, Beam streams MKV (and MP4/MOV) directly. Whether a specific codec plays depends on your TV; MP4 with H.264 or HEVC is the most compatible.
+
+**Why are my Chromecast subtitles out of sync?** The subtitle file was timed for a different release. Use Subtitles › Adjust Timing to shift them while you watch.
+
+**How do I change the audio language on Chromecast?** Pick a track from Beam's audio menu; Beam switches it on the TV.
 
 ## Build from source
 
