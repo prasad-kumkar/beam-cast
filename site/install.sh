@@ -57,7 +57,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-bold "Downloading Beam $version…"
+bold "Downloading Beam ${version}…"
 curl -fL --progress-bar -o "$workdir/Beam.dmg" "$dmg_url" || fail "Download failed."
 
 mountpoint="$workdir/mount"
@@ -66,7 +66,7 @@ hdiutil attach -nobrowse -readonly -quiet -mountpoint "$mountpoint" "$workdir/Be
     || fail "Couldn't open the disk image."
 [[ -d "$mountpoint/Beam.app" ]] || fail "The disk image doesn't contain Beam.app."
 
-bold "Installing to $INSTALL_DIR…"
+bold "Installing to ${INSTALL_DIR}…"
 osascript -e 'quit app "Beam"' >/dev/null 2>&1 || true
 mkdir -p "$INSTALL_DIR" 2>/dev/null || as_needed mkdir -p "$INSTALL_DIR"
 as_needed rm -rf "$APP"
