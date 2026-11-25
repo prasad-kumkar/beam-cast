@@ -213,7 +213,7 @@ private struct TopBar: View {
                     .font(.system(size: 13, weight: .medium))
             }
             .disabled(model.isCasting || model.isBusy)
-            .help("Choose the TV to cast to")
+            .help("Choose the TV to play on")
         }
         // Leave room for the window's traffic lights (the title bar is hidden).
         .padding(.leading, 84)
@@ -532,6 +532,10 @@ private struct SubtitleMenu: View {
     var body: some View {
         HStack(spacing: 0) {
             GlassMenu {
+                if model.selectedDevice?.supportsSubtitles == false {
+                    Text("\(model.selectedDevice?.displayName ?? "This TV") can’t show subtitles from Beam")
+                    Divider()
+                }
                 if model.isCasting && model.selectedSubtitle != nil {
                     Button(model.subtitlesEnabled ? "Hide Subtitles" : "Show Subtitles") { model.toggleSubtitles() }
                     Divider()
@@ -561,15 +565,18 @@ private struct SubtitleMenu: View {
                         Button("Turn Off Subtitles") { model.clearSubtitle() }
                     }
                 }
-                Menu("Style") {
-                    Picker("Size", selection: $model.subtitleStyle.size) {
-                        ForEach(SubtitleStyle.Size.allCases, id: \.self) { Text($0.rawValue.capitalized) }
-                    }
-                    Picker("Color", selection: $model.subtitleStyle.color) {
-                        ForEach(SubtitleStyle.Color.allCases, id: \.self) { Text($0.rawValue.capitalized) }
-                    }
-                    Picker("Background", selection: $model.subtitleStyle.background) {
-                        ForEach(SubtitleStyle.Background.allCases, id: \.self) { Text($0.rawValue.capitalized) }
+                // DLNA TVs use their own caption settings.
+                if model.selectedDevice?.isDLNA != true {
+                    Menu("Style") {
+                        Picker("Size", selection: $model.subtitleStyle.size) {
+                            ForEach(SubtitleStyle.Size.allCases, id: \.self) { Text($0.rawValue.capitalized) }
+                        }
+                        Picker("Color", selection: $model.subtitleStyle.color) {
+                            ForEach(SubtitleStyle.Color.allCases, id: \.self) { Text($0.rawValue.capitalized) }
+                        }
+                        Picker("Background", selection: $model.subtitleStyle.background) {
+                            ForEach(SubtitleStyle.Background.allCases, id: \.self) { Text($0.rawValue.capitalized) }
+                        }
                     }
                 }
             } label: {

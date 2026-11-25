@@ -5,13 +5,43 @@ import Network
 import SwiftUI
 import UniformTypeIdentifiers
 
-struct ChromecastDevice: Identifiable {
+/// A TV Beam can play on: a Google Cast device or a DLNA renderer (Samsung, LG…).
+struct TVDevice: Identifiable {
+    enum Kind {
+        case cast(NWEndpoint)
+        case dlna(DLNARenderer)
+    }
+
     let id: String
     let name: String
-    let endpoint: NWEndpoint
+    let kind: Kind
+
+    init(id: String, name: String, endpoint: NWEndpoint) {
+        self.id = id
+        self.name = name
+        self.kind = .cast(endpoint)
+    }
+
+    init(renderer: DLNARenderer) {
+        id = "dlna:" + renderer.udn
+        name = renderer.displayName
+        kind = .dlna(renderer)
+    }
+
+    var isDLNA: Bool {
+        if case .dlna = kind { return true }
+        return false
+    }
+
+    /// Only Samsung TVs show external subtitles over DLNA.
+    var supportsSubtitles: Bool {
+        if case .dlna(let renderer) = kind { return renderer.isSamsung }
+        return true
+    }
 
     /// Drops the long receiver ID some devices append, e.g. "XstreamIPTV1-VT-d5f6…" → "XstreamIPTV1-VT".
     var displayName: String {
+        guard !isDLNA else { return name }
         let parts = name.split(separator: "-")
         if let last = parts.last, last.count >= 24, last.allSatisfy(\.isHexDigit) {
             return parts.dropLast().joined(separator: "-")
@@ -26,7 +56,7 @@ enum RepeatMode: String, CaseIterable {
 
 final class AppModel: ObservableObject {
     // Devices
-    @Published var devices: [ChromecastDevice] = []
+    @Published var devices: [TVDevice] = []
     @Published var selectedDeviceID: String?
 
     // Playlist: `selectedFile` is the current item of `queue`.
@@ -58,7 +88,7 @@ final class AppModel: ObservableObject {
 
     // Playback
     @Published var thumbnail: NSImage?
-    @Published var statusMessage = "Looking for Cast-enabled TVs…"
+    @Published var statusMessage = "Looking for TVs…"
     @Published var isBusy = false
     @Published var isCasting = false
     @Published var errorMessage: String?
@@ -75,8 +105,12 @@ final class AppModel: ObservableObject {
     private let defaults = UserDefaults.standard
 
     private let discovery = ChromecastDiscovery()
+    private let dlnaDiscovery = DLNADiscovery()
+    private var castDevices: [TVDevice] = []
+    private var userPickedDevice = false
+    private var dlnaDevices: [TVDevice] = []
     private var server: LocalFileServer?
-    private var client: CastV2Client?
+    private var client: TVClient?
 
     static let videoExtensions: Set<String> = ["mp4", "m4v", "mkv", "mov", "webm", "avi", "mpg", "mpeg", "ts"]
     static let convertibleSubtitleExtensions: Set<String> = ["ass", "ssa"]
@@ -89,27 +123,19 @@ final class AppModel: ObservableObject {
 
         discovery.onDevicesChanged = { [weak self] devices in
             DispatchQueue.main.async {
-                guard let self else { return }
-                self.devices = devices
-                let remembered = self.defaults.string(forKey: "lastDeviceID")
-                if !self.isCasting && !self.isBusy,
-                   self.selectedDeviceID == nil || !devices.contains(where: { $0.id == self.selectedDeviceID }) {
-                    self.selectedDeviceID = devices.first(where: { $0.id == remembered })?.id ?? devices.first?.id
-                }
-                if self.autoCastPending, self.selectedDevice != nil, self.probe != nil || MediaInspector.ffprobeURL == nil {
-                    self.autoCastPending = false
-                    self.castSelectedMovie()
-                    return
-                }
-                if devices.isEmpty && !self.isCasting {
-                    self.statusMessage = "No Cast TVs found yet"
-                } else if !devices.isEmpty && !self.isCasting && !self.isBusy {
-                    self.statusMessage = "Select a TV and choose a movie"
-                }
+                self?.castDevices = devices
+                self?.devicesChanged()
+            }
+        }
+        dlnaDiscovery.onDevicesChanged = { [weak self] renderers in
+            DispatchQueue.main.async {
+                self?.dlnaDevices = renderers.map(TVDevice.init(renderer:))
+                self?.devicesChanged()
             }
         }
         applyLaunchArguments()
         discovery.start()
+        dlnaDiscovery.start()
         setUpRemoteCommands()
         NotificationCenter.default.addObserver(
             forName: NSApplication.willTerminateNotification, object: nil, queue: .main
@@ -119,8 +145,36 @@ final class AppModel: ObservableObject {
         }
     }
 
+    /// Merges both device lists. A TV that speaks Cast and DLNA is listed once, as Cast.
+    private func devicesChanged() {
+        let castNames = Set(castDevices.map { $0.displayName.lowercased() })
+        let devices = (castDevices + dlnaDevices.filter { !castNames.contains($0.displayName.lowercased()) })
+            .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
+        self.devices = devices
+        let remembered = defaults.string(forKey: "lastDeviceID")
+        if !isCasting && !isBusy {
+            let selectionGone = selectedDeviceID == nil || !devices.contains(where: { $0.id == selectedDeviceID })
+            // DLNA TVs often answer a moment after Cast ones; switch to the remembered TV when it shows up.
+            let rememberedArrived = !userPickedDevice && remembered != selectedDeviceID && devices.contains(where: { $0.id == remembered })
+            if selectionGone || rememberedArrived {
+                selectedDeviceID = devices.first(where: { $0.id == remembered })?.id ?? devices.first?.id
+            }
+        }
+        if autoCastPending, selectedDevice != nil, probe != nil || MediaInspector.ffprobeURL == nil {
+            autoCastPending = false
+            castSelectedMovie()
+            return
+        }
+        if devices.isEmpty && !isCasting {
+            statusMessage = "No TVs found yet"
+        } else if !devices.isEmpty && !isCasting && !isBusy {
+            statusMessage = "Select a TV and choose a movie"
+        }
+    }
+
     deinit {
         discovery.stop()
+        dlnaDiscovery.stop()
         server?.stop()
         client?.disconnect()
     }
@@ -139,12 +193,13 @@ final class AppModel: ObservableObject {
 
     // MARK: Devices
 
-    var selectedDevice: ChromecastDevice? {
+    var selectedDevice: TVDevice? {
         devices.first(where: { $0.id == selectedDeviceID })
     }
 
-    func selectDevice(_ device: ChromecastDevice) {
+    func selectDevice(_ device: TVDevice) {
         selectedDeviceID = device.id
+        userPickedDevice = true
         defaults.set(device.id, forKey: "lastDeviceID")
         errorMessage = nil
         if !isCasting && !isBusy {
@@ -154,8 +209,9 @@ final class AppModel: ObservableObject {
 
     func refreshDevices() {
         errorMessage = nil
-        statusMessage = "Looking for Cast-enabled TVs…"
+        statusMessage = "Looking for TVs…"
         discovery.restart()
+        dlnaDiscovery.restart()
     }
 
     // MARK: Opening files
@@ -545,7 +601,7 @@ final class AppModel: ObservableObject {
         }
     }
 
-    private func startCast(file: URL, castURL: URL, device: ChromecastDevice, subtitleData: Data?, startTime: Double) {
+    private func startCast(file: URL, castURL: URL, device: TVDevice, subtitleData: Data?, startTime: Double) {
         isCasting = false
         playback = CastPlaybackState()
         scrubberTime = startTime
@@ -555,7 +611,8 @@ final class AppModel: ObservableObject {
         client = nil
         server?.stop()
         server = LocalFileServer()
-        server?.start(fileURL: castURL, subtitleData: subtitleData) { [weak self] result in
+        server?.start(fileURL: castURL, subtitleData: subtitleData,
+                      progressiveFirstResponse: !device.isDLNA) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self else { return }
                 switch result {
@@ -570,10 +627,14 @@ final class AppModel: ObservableObject {
         }
     }
 
-    private func connect(to device: ChromecastDevice, mediaURL: URL, file: URL, hasSubtitles: Bool, startTime: Double) {
+    private func connect(to device: TVDevice, mediaURL: URL, file: URL, hasSubtitles: Bool, startTime: Double) {
         currentMediaURL = mediaURL
         statusMessage = "Connecting to \(device.displayName)…"
-        let client = CastV2Client(endpoint: device.endpoint)
+        let client: TVClient
+        switch device.kind {
+        case .cast(let endpoint): client = CastV2Client(endpoint: endpoint)
+        case .dlna(let renderer): client = DLNAClient(renderer: renderer)
+        }
         self.client = client
         // Callbacks from a previous cast must not touch the current one.
         client.onStatus = { [weak self, weak client] message in

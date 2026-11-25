@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Beam — Play movies from your Mac on any Cast TV</title>
-  <meta name="description" content="Free Mac app to cast MP4, MKV and 4K videos from your Mac to Chromecast, Google TV and Android TV, with subtitles, audio tracks and playlists. No Chrome needed.">
-  <meta name="keywords" content="cast video from mac to chromecast, chromecast mac app, mac to chromecast, stream mkv to chromecast, cast local files to chromecast, chromecast subtitles mac, google tv mac app, android tv cast from mac, macbook to tv, chromecast player mac, 4k hevc chromecast, srt subtitles chromecast">
+  <title>Beam — Play movies from your Mac on Chromecast, Google TV &amp; Samsung TVs</title>
+  <meta name="description" content="Free Mac app to play MP4, MKV and 4K videos from your Mac on Chromecast, Google TV, Android TV and Samsung smart TVs (DLNA), with subtitles, audio tracks and playlists. No Chrome needed.">
+  <meta name="keywords" content="cast video from mac to chromecast, chromecast mac app, mac to chromecast, stream mkv to chromecast, cast local files to chromecast, chromecast subtitles mac, google tv mac app, android tv cast from mac, macbook to tv, chromecast player mac, 4k hevc chromecast, srt subtitles chromecast, cast mac to samsung tv, mac to samsung tv, samsung tv mac app, stream video from mac to samsung tv, dlna mac app, mac dlna player, play mkv on samsung tv from mac, lg tv mac">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="author" content="Prasad Kumkar">
   <meta name="theme-color" content="#111114">
@@ -14,15 +14,15 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Beam">
   <meta property="og:url" content="https://prasad-kumkar.github.io/beam-cast/">
-  <meta property="og:title" content="Beam — Cast videos from your Mac to Chromecast &amp; Google TV">
-  <meta property="og:description" content="Free Mac app: play MP4, MKV and 4K movies from your Mac on any Chromecast or Google TV, with subtitles, audio tracks, playlists and resume.">
+  <meta property="og:title" content="Beam — Play videos from your Mac on Chromecast, Google TV &amp; Samsung TVs">
+  <meta property="og:description" content="Free Mac app: play MP4, MKV and 4K movies from your Mac on any Chromecast, Google TV or Samsung smart TV, with subtitles, audio tracks, playlists and resume.">
   <meta property="og:image" content="https://prasad-kumkar.github.io/beam-cast/screenshot-now-playing.png">
   <meta property="og:image:width" content="1600">
   <meta property="og:image:height" content="1033">
   <meta property="og:image:alt" content="Beam controlling a movie playing on a Chromecast TV">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Beam — Cast videos from your Mac to Chromecast &amp; Google TV">
-  <meta name="twitter:description" content="Free Mac app to play MP4, MKV and 4K movies on any Chromecast or Google TV, with subtitles and playlists.">
+  <meta name="twitter:title" content="Beam — Play videos from your Mac on Chromecast, Google TV &amp; Samsung TVs">
+  <meta name="twitter:description" content="Free Mac app to play MP4, MKV and 4K movies on any Chromecast, Google TV or Samsung TV, with subtitles and playlists.">
   <meta name="twitter:image" content="https://prasad-kumkar.github.io/beam-cast/screenshot-now-playing.png">
 
   <script type="application/ld+json">
@@ -31,11 +31,11 @@
   "@type": "SoftwareApplication",
   "name": "Beam",
   "alternateName": "Beam Cast",
-  "description": "Free Mac app to cast local video files (MP4, MKV, MOV, 4K HEVC) from macOS to Chromecast, Google TV and Android TV, with subtitles, audio tracks, playlists and resume.",
+  "description": "Free Mac app to play local video files (MP4, MKV, MOV, 4K HEVC) from macOS on Chromecast, Google TV, Android TV and Samsung and other DLNA smart TVs, with subtitles, audio tracks, playlists and resume.",
   "applicationCategory": "MultimediaApplication",
   "applicationSubCategory": "Video streaming",
   "operatingSystem": "macOS 13 or later",
-  "softwareVersion": "1.2.1",
+  "softwareVersion": "1.3.0",
   "url": "https://prasad-kumkar.github.io/beam-cast/",
   "downloadUrl": "https://github.com/prasad-kumkar/beam-cast/releases/latest",
   "image": "https://prasad-kumkar.github.io/beam-cast/icon.png",
@@ -53,6 +53,7 @@
   "license": "https://github.com/prasad-kumkar/beam-cast/blob/main/LICENSE",
   "featureList": [
     "Cast MP4, MKV and MOV to Chromecast",
+    "Play videos on Samsung and other DLNA smart TVs",
     "4K HEVC streaming",
     "SRT, VTT and ASS subtitles",
     "Embedded subtitle and audio track selection",
@@ -105,7 +106,15 @@
       "name": "Which TVs and devices does Beam work with?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Any Google Cast receiver: Chromecast, Chromecast Ultra, Chromecast with Google TV, Google TV Streamer, and smart TVs running Google TV or Android TV from brands such as Sony, TCL, Hisense and Philips."
+        "text": "Any Google Cast receiver: Chromecast, Chromecast Ultra, Chromecast with Google TV, Google TV Streamer, and smart TVs running Google TV or Android TV from brands such as Sony, TCL, Hisense and Philips. Beam also plays to Samsung smart TVs and other DLNA TVs (such as LG and Panasonic) that don't have Chromecast built in."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I play videos from my Mac on a Samsung TV?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Samsung smart TVs don't support Chromecast, so Beam plays to them over DLNA, which Samsung TVs support. Put your Mac and TV on the same Wi-Fi, drop the movie onto Beam, pick your Samsung TV in the top-right corner and press Play on TV. Play, pause, seeking, volume, resume and Up Next all work, and subtitle files are sent to the TV."
       }
     },
     {
@@ -270,7 +279,7 @@
     <div class="hero">
       <img class="icon" src="icon.png" alt="Beam app icon">
       <h1>Your movies,<br>on the big screen.</h1>
-      <p>Beam plays the movies on your Mac on any Chromecast or Google&nbsp;Cast TV. Drop a file, press play.</p>
+      <p>Beam plays the movies on your Mac on any Chromecast, Google&nbsp;TV or Samsung&nbsp;TV. Drop a file, press play.</p>
       <div class="actions">
         <a class="button primary" href="https://github.com/prasad-kumkar/beam-cast/releases/latest/download/Beam.dmg">Download for Mac</a>
         <a class="button secondary" href="https://github.com/prasad-kumkar/beam-cast">View on GitHub</a>
@@ -285,10 +294,10 @@
     </div>
 
     <div class="shot">
-      <img src="screenshot-now-playing.png" alt="Beam Mac app casting a movie to a Chromecast TV, with play, pause, seek, subtitle and volume controls" width="1600" height="1033">
+      <img src="screenshot-now-playing.png" alt="Beam Mac app playing a movie on a Chromecast or Samsung TV, with play, pause, seek, subtitle and volume controls" width="1600" height="1033">
     </div>
 
-    <p class="works">Works with <strong>Chromecast</strong>, <strong>Chromecast with Google TV</strong>, <strong>Chromecast Ultra</strong>, <strong>Google TV</strong> and <strong>Android TV</strong> sets (Sony, TCL, Hisense, Philips and more) and other Google Cast receivers.</p>
+    <p class="works">Works with <strong>Chromecast</strong>, <strong>Chromecast with Google TV</strong>, <strong>Chromecast Ultra</strong>, <strong>Google TV</strong> and <strong>Android TV</strong> sets (Sony, TCL, Hisense, Philips and more) and other Google Cast receivers, plus <strong>Samsung</strong> smart TVs and other <strong>DLNA</strong> TVs (LG, Panasonic and more).</p>
 
     <section id="features">
       <h2>Everything a movie night needs</h2>
@@ -299,6 +308,7 @@
         <div class="card"><div class="glyph">≡</div><h3>Up Next</h3><p>Drop a whole season. Episodes play back to back, with shuffle and repeat.</p></div>
         <div class="card"><div class="glyph">↺</div><h3>Resume anywhere</h3><p>Every movie picks up where you stopped, even days later.</p></div>
         <div class="card"><div class="glyph">⌨︎</div><h3>Media keys</h3><p>Play, pause and skip from your keyboard or Control Center while Beam stays in the background.</p></div>
+        <div class="card"><div class="glyph">▭</div><h3>Samsung TVs too</h3><p>No Chromecast? Beam plays to Samsung and other smart TVs over DLNA, with the same controls.</p></div>
       </div>
     </section>
 
@@ -330,7 +340,11 @@
         </details>
         <details>
           <summary>Which TVs and devices does Beam work with?</summary>
-          <p>Any Google Cast receiver: Chromecast, Chromecast Ultra, Chromecast with Google TV, Google TV Streamer, and smart TVs running Google TV or Android TV from brands such as Sony, TCL, Hisense and Philips.</p>
+          <p>Any Google Cast receiver: Chromecast, Chromecast Ultra, Chromecast with Google TV, Google TV Streamer, and smart TVs running Google TV or Android TV from brands such as Sony, TCL, Hisense and Philips. Beam also plays to Samsung smart TVs and other DLNA TVs (such as LG and Panasonic) that don't have Chromecast built in.</p>
+        </details>
+        <details>
+          <summary>How do I play videos from my Mac on a Samsung TV?</summary>
+          <p>Samsung smart TVs don't support Chromecast, so Beam plays to them over DLNA, which Samsung TVs support. Put your Mac and TV on the same Wi-Fi, drop the movie onto Beam, pick your Samsung TV in the top-right corner and press Play on TV. Play, pause, seeking, volume, resume and Up Next all work, and subtitle files are sent to the TV.</p>
         </details>
         <details>
           <summary>Is Beam free?</summary>
@@ -374,7 +388,7 @@
     <footer>
       <span>© 2026 Prasad Kumkar</span>
       <span><a href="https://github.com/prasad-kumkar/beam-cast/blob/main/LICENSE">Business Source License 1.1</a> · free for personal use</span>
-      <span>Chromecast and Google Cast are trademarks of Google LLC. Beam is not affiliated with Google.</span>
+      <span>Chromecast and Google Cast are trademarks of Google LLC. Samsung is a trademark of Samsung Electronics. Beam is not affiliated with Google or Samsung.</span>
     </footer>
   </div>
   <script>

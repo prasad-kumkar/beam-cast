@@ -25,8 +25,31 @@ struct CastPlaybackState: Equatable {
     }
 }
 
+/// What AppModel needs from a TV connection, whether Google Cast or DLNA.
+protocol TVClient: AnyObject {
+    var onStatus: ((String) -> Void)? { get set }
+    var onPlaybackState: ((CastPlaybackState) -> Void)? { get set }
+    var onReady: (() -> Void)? { get set }
+    var onFailure: ((Error) -> Void)? { get set }
+
+    func cast(mediaURL: URL, fileName: String, subtitleURL: URL?, subtitlesEnabled: Bool,
+              subtitleStyle: SubtitleStyle, startTime: Double)
+    func stopApplication()
+    func stopApplicationSync()
+    func disconnect()
+    func reloadSubtitles(url: URL)
+    func play()
+    func pause()
+    func setVolume(_ level: Double)
+    func setMuted(_ muted: Bool)
+    func seek(to time: Double)
+    func seek(by offset: Double)
+    func setSubtitlesEnabled(_ enabled: Bool)
+    func setSubtitleStyle(_ style: SubtitleStyle)
+}
+
 final class ChromecastDiscovery {
-    var onDevicesChanged: (([ChromecastDevice]) -> Void)?
+    var onDevicesChanged: (([TVDevice]) -> Void)?
 
     private var browser: NWBrowser?
     private let queue = DispatchQueue(label: "beam.discovery")
@@ -47,12 +70,12 @@ final class ChromecastDiscovery {
             }
         }
         browser.browseResultsChangedHandler = { [weak self] results, _ in
-            let devices = results.compactMap { result -> ChromecastDevice? in
+            let devices = results.compactMap { result -> TVDevice? in
                 guard case .service(let name, _, _, _) = result.endpoint else { return nil }
                 let cleanedName = name.hasSuffix("._googlecast._tcp.local.")
                     ? String(name.dropLast("._googlecast._tcp.local.".count))
                     : name
-                return ChromecastDevice(id: cleanedName, name: cleanedName, endpoint: result.endpoint)
+                return TVDevice(id: cleanedName, name: cleanedName, endpoint: result.endpoint)
             }
             .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
 
@@ -74,7 +97,7 @@ final class ChromecastDiscovery {
     }
 }
 
-final class CastV2Client {
+final class CastV2Client: TVClient {
     var onStatus: ((String) -> Void)?
     var onPlaybackState: ((CastPlaybackState) -> Void)?
     var onReady: (() -> Void)?

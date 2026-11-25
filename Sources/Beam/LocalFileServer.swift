@@ -8,6 +8,8 @@ final class LocalFileServer {
     private var fileURL: URL?
     private var subtitleData: Data?
     private var hasServedInitialGet = false
+    /// Cast workaround: answer the first GET with a full 200 even if it asks for a range.
+    private var progressiveFirstResponse = true
     /// The connection currently streaming the movie. When the TV seeks it opens a
     /// new ranged request but often leaves the old one open, and two full-speed
     /// streams starve the new one so playback buffers forever.
@@ -19,11 +21,17 @@ final class LocalFileServer {
 
     /// Relative to the movie URL, so it inherits the session token.
     static let subtitlePath = "subtitles.vtt"
+    /// The same subtitles as SRT, for Samsung TVs over DLNA.
+    static let srtSubtitlePath = "subtitles.srt"
 
-    func start(fileURL: URL, subtitleData: Data? = nil, completion: @escaping (Result<URL, Error>) -> Void) {
+    /// `progressiveFirstResponse` keeps the Cast workaround described in `respond`;
+    /// DLNA TVs get byte ranges honored from the first request.
+    func start(fileURL: URL, subtitleData: Data? = nil, progressiveFirstResponse: Bool = true,
+               completion: @escaping (Result<URL, Error>) -> Void) {
         stop()
         self.fileURL = fileURL
         self.subtitleData = subtitleData
+        self.progressiveFirstResponse = progressiveFirstResponse
         hasServedInitialGet = false
         token = (0..<4).map { _ in String(format: "%08x", UInt32.random(in: .min ... .max)) }.joined()
         let token = token
@@ -138,11 +146,17 @@ final class LocalFileServer {
         }
 
         let method = String(requestParts[0]).uppercased()
-        let path = String(requestParts[1]).split(separator: "?").first.map(String.init) ?? "/"
+        let target = String(requestParts[1])
+        let path = target.split(separator: "?").first.map(String.init) ?? "/"
+        let query = target.split(separator: "?", maxSplits: 1).dropFirst().first.map(String.init) ?? ""
         let decodedPath = path.removingPercentEncoding ?? path
         let expectedPath = "/\(token)/\(fileURL.lastPathComponent)"
         if path == "/\(token)/\(Self.subtitlePath)" {
             sendSubtitles(connection, method: method)
+            return
+        }
+        if path == "/\(token)/\(Self.srtSubtitlePath)" {
+            sendSubtitles(connection, method: method, asSRT: true)
             return
         }
         guard decodedPath == expectedPath || path == "/health" else {
@@ -183,7 +197,7 @@ final class LocalFileServer {
         // honor byte ranges so forward/backward seeking starts at the right
         // byte offset instead of replaying from the beginning.
         let requestedRange = method == "GET" ? Self.parseRange(headers["range"], fileSize: fileSize) : nil
-        let range = hasServedInitialGet ? requestedRange : nil
+        let range = hasServedInitialGet || !progressiveFirstResponse ? requestedRange : nil
         if method == "GET" {
             hasServedInitialGet = true
         }
@@ -204,6 +218,18 @@ final class LocalFileServer {
         response += "Access-Control-Expose-Headers: Content-Length, Content-Range, Accept-Ranges\r\n"
         if range != nil {
             response += "Content-Range: bytes \(start)-\(end)/\(fileSize)\r\n"
+        }
+        // DLNA TVs ask whether seeking by byte range is allowed before they enable it.
+        if headers["getcontentfeatures.dlna.org"] != nil {
+            response += "contentFeatures.dlna.org: DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000\r\n"
+        }
+        if headers["transfermode.dlna.org"] != nil || headers["getcontentfeatures.dlna.org"] != nil {
+            response += "transferMode.dlna.org: Streaming\r\n"
+        }
+        // Samsung TVs look for external subtitles in this header.
+        if headers["getcaptioninfo.sec"] != nil, subtitleData != nil, !query.contains("captions=0"),
+           let host = headers["host"] {
+            response += "CaptionInfo.sec: http://\(host)/\(token)/\(Self.srtSubtitlePath)\r\n"
         }
         response += "\r\n"
 
@@ -290,15 +316,16 @@ final class LocalFileServer {
         }
     }
 
-    private func sendSubtitles(_ connection: NWConnection, method: String) {
-        guard let subtitleData else {
+    private func sendSubtitles(_ connection: NWConnection, method: String, asSRT: Bool = false) {
+        guard let vtt = subtitleData else {
             sendSimpleResponse(connection, status: "404 Not Found", body: "No subtitles")
             return
         }
         // The Cast receiver fetches text tracks with XHR, so CORS headers are required.
+        let subtitleData = asSRT ? SubtitleConverter.srt(fromWebVTT: vtt) : vtt
         var response = "HTTP/1.0 200 OK\r\n"
         response += "Server: Beam/1.0\r\n"
-        response += "Content-Type: text/vtt; charset=utf-8\r\n"
+        response += "Content-Type: \(asSRT ? "application/x-subrip" : "text/vtt"); charset=utf-8\r\n"
         response += "Content-Length: \(subtitleData.count)\r\n"
         response += "Access-Control-Allow-Origin: *\r\n"
         response += "Access-Control-Allow-Headers: Content-Type, Range\r\n"

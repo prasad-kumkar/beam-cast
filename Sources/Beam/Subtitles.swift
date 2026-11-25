@@ -22,6 +22,32 @@ enum SubtitleConverter {
         return Data(shift(srtToVTT(normalized), by: offset).utf8)
     }
 
+    /// Turns the WebVTT Beam serves back into SRT, which DLNA TVs (Samsung) read.
+    static func srt(fromWebVTT data: Data) -> Data {
+        let text = String(decoding: data, as: UTF8.self).replacingOccurrences(of: "\r\n", with: "\n")
+        var cues: [String] = []
+        for block in text.components(separatedBy: "\n\n") {
+            var lines = block.components(separatedBy: "\n").filter { !$0.isEmpty }
+            guard let timingIndex = lines.firstIndex(where: { $0.contains("-->") }) else { continue }
+            lines.removeFirst(timingIndex)
+            let parts = lines[0].components(separatedBy: "-->")
+            guard parts.count == 2 else { continue }
+            let start = srtTimestamp(parts[0])
+            let end = srtTimestamp(String(parts[1].trimmingCharacters(in: .whitespaces).split(separator: " ").first ?? ""))
+            let body = lines.dropFirst().joined(separator: "\n")
+            guard !body.isEmpty else { continue }
+            cues.append("\(cues.count + 1)\n\(start) --> \(end)\n\(body)")
+        }
+        return Data((cues.joined(separator: "\n\n") + "\n").utf8)
+    }
+
+    /// "01:02.500" or "00:01:02.500" → "00:01:02,500"
+    private static func srtTimestamp(_ stamp: String) -> String {
+        let trimmed = stamp.trimmingCharacters(in: .whitespaces)
+        let full = trimmed.split(separator: ":").count == 2 ? "00:" + trimmed : trimmed
+        return full.replacingOccurrences(of: ".", with: ",")
+    }
+
     /// Finds a subtitle file next to the movie with the same base name,
     /// e.g. "Movie.mp4" → "Movie.srt", "Movie.en.srt" or "Movie.vtt".
     static func sidecar(for movieURL: URL) -> URL? {
